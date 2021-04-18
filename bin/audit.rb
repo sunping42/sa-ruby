@@ -1,12 +1,21 @@
 #!/usr/bin/env ruby
 
-puts "Server Assessment Tool v0.1"
-puts "Basic system check functionality"
+puts "Server Assessment Tool v0.2"
+puts "Enhanced system monitoring and security analysis"
 
-# Basic system info gathering
+# Display system information at startup
+puts "\n=== System Information ==="
 hostname = `hostname`.strip
-puts "System: #{hostname}"
+os_info = `grep PRETTY_NAME /etc/os-release`.split('"')[1] rescue "Unknown"
+kernel = `uname -r`.strip
+uptime = `uptime -p`.strip
 
+puts "Hostname: #{hostname}"
+puts "OS: #{os_info}"
+puts "Kernel: #{kernel}"
+puts "Uptime: #{uptime}"
+
+puts "\n=== Security Assessment ==="
 # Add some basic security checks
 puts "Checking SSH configuration..."
 ssh_root = `grep PermitRootLogin /etc/ssh/sshd_config`.strip
