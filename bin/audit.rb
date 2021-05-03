@@ -24,3 +24,13 @@ puts "SSH Root Access: #{ssh_root}"
 puts "Checking for updates..."
 updates = `apt list --upgradable 2>/dev/null | wc -l`.strip.to_i - 1
 puts "Available updates: #{updates}"
+
+puts "\n=== Port Analysis ==="
+# Show exposed ports
+listening_ports = `netstat -tuln | grep LISTEN`.split("\n")
+if listening_ports.any?
+  ports = listening_ports.map { |line| line.split[3].split(':').last }.uniq.sort
+  puts "Publicly exposed ports: #{ports.join(', ')}"
+else
+  puts "No publicly exposed ports detected"
+end
