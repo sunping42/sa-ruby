@@ -26,7 +26,7 @@ updates = `apt list --upgradable 2>/dev/null | wc -l`.strip.to_i - 1
 puts "Available updates: #{updates}"
 
 puts "\n=== Port Analysis ==="
-# Show exposed ports
+# Show exposed ports (optimized with -n flag)
 listening_ports = `netstat -tuln | grep LISTEN`.split("\n")
 if listening_ports.any?
   ports = listening_ports.map { |line| line.split[3].split(':').last }.uniq.sort
