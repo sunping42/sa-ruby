@@ -21,6 +21,14 @@ puts "Checking SSH configuration..."
 ssh_root = `grep PermitRootLogin /etc/ssh/sshd_config`.strip
 puts "SSH Root Access: #{ssh_root}"
 
+puts "Checking firewall status..."
+if `command -v ufw >/dev/null 2>&1 && echo "exists"`.strip == "exists"
+  ufw_status = `ufw status`.include?("active") ? "ACTIVE" : "INACTIVE"
+  puts "UFW Firewall: #{ufw_status}"
+else
+  puts "UFW Firewall: NOT INSTALLED"
+end
+
 puts "Checking for updates..."
 updates = `apt list --upgradable 2>/dev/null | wc -l`.strip.to_i - 1
 puts "Available updates: #{updates}"
