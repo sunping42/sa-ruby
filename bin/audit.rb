@@ -1,11 +1,11 @@
 #!/usr/bin/env ruby
 
-puts "Server Assessment Tool v0.2"
+puts "Server Assessment Tool v0.3"
 puts "Enhanced system monitoring and security analysis"
 
 # Display system information at startup
 puts "\n=== System Information ==="
-hostname = `hostname`.strip
+hostname = ENV['HOSTNAME'] || `hostname`.strip
 os_info = `grep PRETTY_NAME /etc/os-release`.split('"')[1] rescue "Unknown"
 kernel = `uname -r`.strip
 uptime = `uptime -p`.strip
