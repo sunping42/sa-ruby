@@ -35,9 +35,9 @@ puts "Available updates: #{updates}"
 
 puts "\n=== Port Analysis ==="
 # Show exposed ports (optimized with -n flag)
-listening_ports = `netstat -tuln | grep LISTEN`.split("\n")
+listening_ports = `ss -tuln | grep LISTEN`.split("\n")
 if listening_ports.any?
-  ports = listening_ports.map { |line| line.split[3].split(':').last }.uniq.sort
+  ports = listening_ports.map { |line| line.split[4].split(':').last }.uniq.sort
   puts "Publicly exposed ports: #{ports.join(', ')}"
 else
   puts "No publicly exposed ports detected"
