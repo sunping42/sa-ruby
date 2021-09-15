@@ -21,6 +21,19 @@ puts "Checking SSH configuration..."
 ssh_root = `grep PermitRootLogin /etc/ssh/sshd_config`.strip
 puts "SSH Root Access: #{ssh_root}"
 
+# Check SSH port configuration
+ssh_port = `grep "^Port" /etc/ssh/sshd_config`.strip
+if ssh_port.empty?
+  puts "SSH Port: 22 (default)"
+else
+  port_num = ssh_port.split.last.to_i
+  if port_num > 1024
+    puts "SSH Port: #{port_num} (unprivileged - potential security risk)"
+  else
+    puts "SSH Port: #{port_num}"
+  end
+end
+
 puts "Checking firewall status..."
 if `command -v ufw >/dev/null 2>&1 && echo "exists"`.strip == "exists"
   ufw_status = `ufw status`.include?("active") ? "ACTIVE" : "INACTIVE"
