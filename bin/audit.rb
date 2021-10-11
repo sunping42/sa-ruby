@@ -16,6 +16,9 @@ puts "Kernel: #{kernel}"
 puts "Uptime: #{uptime}"
 
 puts "\n=== Security Assessment ==="
+# Check SSH config overrides first
+ssh_config_overrides = `grep '^Include' /etc/ssh/sshd_config 2>/dev/null`.split.last
+
 # Add some basic security checks
 puts "Checking SSH configuration..."
 ssh_root = `grep PermitRootLogin /etc/ssh/sshd_config`.strip
