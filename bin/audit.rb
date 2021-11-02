@@ -19,6 +19,11 @@ puts "\n=== Security Assessment ==="
 # Check SSH config overrides first
 ssh_config_overrides = `grep '^Include' /etc/ssh/sshd_config 2>/dev/null`.split.last
 
+# Handle cases where override file might be missing
+if ssh_config_overrides && !ssh_config_overrides.empty? && !File.directory?(File.dirname(ssh_config_overrides))
+  puts "Warning: SSH config override directory missing"
+end
+
 # Add some basic security checks
 puts "Checking SSH configuration..."
 ssh_root = `grep PermitRootLogin /etc/ssh/sshd_config`.strip
