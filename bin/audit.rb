@@ -58,8 +58,9 @@ puts "\n=== Port Analysis ==="
 # Show exposed ports (optimized with -n flag)
 listening_ports = `ss -tuln | grep LISTEN`.split("\n")
 if listening_ports.any?
-  ports = listening_ports.map { |line| line.split[4].split(':').last }.uniq.sort
-  puts "Publicly exposed ports: #{ports.join(', ')}"
+  ports = listening_ports.map { |line| line.split[4].split(':').last }.uniq.sort_by(&:to_i)
+  puts "Publicly exposed ports (#{ports.length} total): #{ports.join(', ')}"
+  puts "Port security assessment: #{ports.length < 5 ? 'LOW RISK' : 'REVIEW NEEDED'}"
 else
   puts "No publicly exposed ports detected"
 end
