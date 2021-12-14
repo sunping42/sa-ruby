@@ -50,6 +50,21 @@ else
   puts "UFW Firewall: NOT INSTALLED"
 end
 
+puts "Checking intrusion prevention..."
+# Check for Fail2ban
+if `dpkg -l 2>/dev/null | grep fail2ban`.strip.length > 0
+  puts "Fail2ban: INSTALLED"
+else
+  puts "Fail2ban: NOT INSTALLED"
+end
+
+# Check for CrowdSec
+if `dpkg -l 2>/dev/null | grep crowdsec`.strip.length > 0
+  puts "CrowdSec: INSTALLED"
+else
+  puts "CrowdSec: NOT INSTALLED"
+end
+
 puts "Checking for updates..."
 updates = `apt list --upgradable 2>/dev/null | wc -l`.strip.to_i - 1
 puts "Available updates: #{updates}"
