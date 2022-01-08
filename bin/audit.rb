@@ -69,6 +69,15 @@ puts "Checking for updates..."
 updates = `apt list --upgradable 2>/dev/null | wc -l`.strip.to_i - 1
 puts "Available updates: #{updates}"
 
+puts "\n=== Additional Security Checks ==="
+# Check for suspicious SUID files
+puts "Checking SUID files..."
+suid_files = `find / -type f -perm -4000 2>/dev/null | wc -l`.strip.to_i
+puts "SUID files found: #{suid_files}"
+if suid_files > 50
+  puts "WARNING: High number of SUID files detected"
+end
+
 puts "\n=== Port Analysis ==="
 # Show exposed ports (optimized with -n flag)
 listening_ports = `ss -tuln | grep LISTEN`.split("\n")
