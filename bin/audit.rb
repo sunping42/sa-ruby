@@ -1,21 +1,51 @@
 #!/usr/bin/env ruby
 
-puts "Server Assessment Tool v0.3"
-puts "Enhanced system monitoring and security analysis"
+require 'net/http'
+require 'uri'
+require 'fileutils'
+require 'open3'
 
-# Display system information at startup
-puts "\n=== System Information ==="
-hostname = ENV['HOSTNAME'] || `hostname`.strip
-os_info = `grep PRETTY_NAME /etc/os-release`.split('"')[1] rescue "Unknown"
-kernel = `uname -r`.strip
-uptime = `uptime -p`.strip
+class ServerAuditor
+  def initialize
+    @timestamp = Time.now.strftime("%Y%m%d_%H%M%S")
+    @report_file = "security-assessment-#{@timestamp}.txt"
+  end
 
-puts "Hostname: #{hostname}"
-puts "OS: #{os_info}"
-puts "Kernel: #{kernel}"
-puts "Uptime: #{uptime}"
+  def run
+    puts "Server Assessment Tool v1.0"
+    puts "Enhanced system monitoring and security analysis"
 
-puts "\n=== Security Assessment ==="
+    display_system_info
+    run_security_checks
+    puts "\nAssessment completed."
+  end
+
+  private
+
+  def display_system_info
+    puts "\n=== System Information ==="
+    hostname = ENV['HOSTNAME'] || `hostname`.strip
+    os_info = `grep PRETTY_NAME /etc/os-release`.split('"')[1] rescue "Unknown"
+    kernel = `uname -r`.strip
+    uptime = `uptime -p`.strip
+
+    puts "Hostname: #{hostname}"
+    puts "OS: #{os_info}"
+    puts "Kernel: #{kernel}"
+    puts "Uptime: #{uptime}"
+  end
+
+  def run_security_checks
+    puts "\n=== Security Assessment ==="
+    check_ssh_configuration
+    check_firewall_status
+    check_intrusion_prevention  
+    check_system_updates
+    check_port_security
+    check_suid_files
+  end
+
+  def check_ssh_configuration
 # Check SSH config overrides first
 ssh_config_overrides = `grep '^Include' /etc/ssh/sshd_config 2>/dev/null`.split.last
 
